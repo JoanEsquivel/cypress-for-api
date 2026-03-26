@@ -1,0 +1,5 @@
+{
+    "base_url": "https://restful-booker.herokuapp.com",
+    "booking": "/booking",
+    "auth": "/auth"
+}

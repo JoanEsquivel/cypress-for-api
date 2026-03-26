@@ -1,0 +1,8 @@
+{
+	"scripts": {
+		"postinstall": "cypress install"
+	},
+	"devDependencies": {
+		"cypress": "^15.13.0"
+	}
+}
