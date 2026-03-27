@@ -15,7 +15,6 @@ describe('Bookings Test Suite', () => {
     })
 
     it('CRUD booking workflow', function () {
-        // CREATE
         cy.api('POST', endpoints.booking, payloads.newBooking).then((createResponse) => {
             expect(createResponse.status).to.eq(200)
             expect(createResponse.body).to.have.property('bookingid').and.to.be.a('number')
@@ -25,7 +24,6 @@ describe('Bookings Test Suite', () => {
 
             const bookingId = createResponse.body.bookingid
 
-            // READ - verify creation persisted
             cy.api('GET', `${endpoints.booking}/${bookingId}`).then((readResponse) => {
                 expect(readResponse.status).to.eq(200)
                 expect(readResponse.body.firstname).to.eq(payloads.newBooking.firstname)
@@ -34,7 +32,6 @@ describe('Bookings Test Suite', () => {
                 expect(readResponse.body.bookingdates.checkout).to.eq(payloads.newBooking.bookingdates.checkout)
                 expect(readResponse.body.additionalneeds).to.eq(payloads.newBooking.additionalneeds)
 
-                // UPDATE
                 cy.api('PUT', `${endpoints.booking}/${bookingId}`, payloads.updatedBooking).then((updateResponse) => {
                     expect(updateResponse.status).to.eq(200)
                     expect(updateResponse.body.totalprice).to.eq(payloads.updatedBooking.totalprice)
@@ -43,7 +40,6 @@ describe('Bookings Test Suite', () => {
                     expect(updateResponse.body.bookingdates.checkout).to.eq(payloads.updatedBooking.bookingdates.checkout)
                     expect(updateResponse.body.additionalneeds).to.eq(payloads.updatedBooking.additionalneeds)
 
-                    // READ - verify update persisted
                     cy.api('GET', `${endpoints.booking}/${bookingId}`).then((readAfterUpdateResponse) => {
                         expect(readAfterUpdateResponse.status).to.eq(200)
                         expect(readAfterUpdateResponse.body.totalprice).to.eq(payloads.updatedBooking.totalprice)
@@ -51,11 +47,9 @@ describe('Bookings Test Suite', () => {
                         expect(readAfterUpdateResponse.body.bookingdates.checkin).to.eq(payloads.updatedBooking.bookingdates.checkin)
                         expect(readAfterUpdateResponse.body.bookingdates.checkout).to.eq(payloads.updatedBooking.bookingdates.checkout)
 
-                        // DELETE
                         cy.api('DELETE', `${endpoints.booking}/${bookingId}`).then((deleteResponse) => {
                             expect(deleteResponse.status).to.eq(201)
 
-                            // READ - verify booking no longer exists
                             cy.api('GET', `${endpoints.booking}/${bookingId}`).then((readAfterDeleteResponse) => {
                                 expect(readAfterDeleteResponse.status).to.eq(404)
                             })
