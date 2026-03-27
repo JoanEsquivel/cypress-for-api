@@ -71,3 +71,42 @@ Before each test, I hit the `/auth` endpoint with credentials stored in `cypress
 ### Test structure
 
 I intentionally chained the CRUD operations inside a single test using `.then()` callbacks to show how requests can be sequenced — passing the `bookingid` from the create step into the read, update, and delete steps. In a real project I'd split these into independent tests, but chaining them here shows the request dependency flow clearly.
+
+---
+
+## Known issue: POST /booking returns 500
+
+While testing manually with curl, I noticed that `POST /booking` was returning a `500 Internal Server Error` even though the request itself is perfectly valid:
+
+```bash
+curl -X POST https://restful-booker.herokuapp.com/booking \
+  -H 'Content-Type: application/json' \
+  -H 'Accept: application/json' \
+  -d '{
+    "firstname": "Jim",
+    "lastname": "Brown",
+    "totalprice": 111,
+    "depositpaid": true,
+    "bookingdates": {
+      "checkin": "2018-01-01",
+      "checkout": "2019-01-01"
+    },
+    "additionalneeds": "Breakfast"
+  }'
+```
+
+Response:
+
+```
+HTTP/1.1 500 Internal Server Error
+Content-Type: text/plain; charset=utf-8
+X-Powered-By: Express
+
+Internal Server Error
+```
+
+I confirmed it wasn't a payload issue, it fails the same way with and without `additionalneeds`. I also checked that the server was actually up by hitting `/ping` (returns `Created`) and `/health`, both of which responded fine. The `/booking` POST endpoint just wasn't working at that point in time.
+
+The Etag on every 500 response was always the same (`W/"15-/6VXivhc2MKdLfIkLcUE47K6aH0"`), which suggests the server was returning a cached error — a sign that something was broken at the application level on their end, not mine.
+
+This is a public practice API hosted on Heroku with no SLA, so this kind of thing happens.

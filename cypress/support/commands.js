@@ -6,10 +6,10 @@ Cypress.Commands.add('api', (method, path, body = null) => {
             method,
             url: `${endpoints.base_url}${path}`,
             headers: {
-                // 'Content-Type': 'application/json',
-                // 'Accept': 'application/json',
+                'Content-Type': 'application/json',
+                'Accept': 'application/json',
                 'Authorization': `Bearer ${token}`,
-                // 'Cookie': `token=${token}`,
+                'Cookie': `token=${token}`,
             },
             ...(body && { body }),
             failOnStatusCode: false,
