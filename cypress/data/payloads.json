@@ -1,0 +1,24 @@
+{
+    "newBooking": {
+        "firstname": "Joan",
+        "lastname": "Esquivel",
+        "totalprice": 100,
+        "depositpaid": true,
+        "bookingdates": {
+            "checkin": "2018-01-01",
+            "checkout": "2019-01-01"
+        },
+        "additionalneeds": "Breakfast"
+    },
+    "updatedBooking": {
+        "firstname": "Joan",
+        "lastname": "Esquivel",
+        "totalprice": 250,
+        "depositpaid": false,
+        "bookingdates": {
+            "checkin": "2025-06-01",
+            "checkout": "2025-06-15"
+        },
+        "additionalneeds": "Lunch"
+    }
+}
